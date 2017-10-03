@@ -1,0 +1,104 @@
+<html>
+	<head>
+    	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script> 
+    	<script src="http://malsup.github.com/jquery.form.js"></script>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    	<script type="text/javascript">
+    $(document).ready(function(){
+            $.ajax({url: "http://httpserver.com", type: "GET", contentType: "application/json", beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', 'Basic xxxxxxxxxxx');
+        }, success: function(result){
+            printGraph(result);
+        }});
+    });
+    	</script>
+
+	</head>
+	<body>
+        <div id="tempGraph"></div>
+        <div id="humGraph"></div>
+        <script type="text/javascript">
+
+            function printGraph(json){
+                var tempIntNebbiolo = [];
+                var tempIntCabernet = [];
+                var tempExt = [];
+                var humidity = [];
+                var timestamp = [];
+                for (var i = 0; i < json.length; i++) { 
+                    timestamp.push((json[i].timestamp)*1000);
+                    tempIntNebbiolo.push(json[i].tempIntNebbiolo);
+                    tempIntCabernet.push(json[i].tempIntCabernet);
+                    tempExt.push(json[i].tempExt);
+                    humidity.push(json[i].humidity);
+                }
+
+                var traceTemp1 = {
+                  x: timestamp,
+                  y: tempIntNebbiolo,
+                  mode: 'lines',
+                  name: 'Nebbiolo',
+                  line: {
+                    color: '#f45c42',
+                    shape: 'spline'
+                    }
+                };
+
+                var traceTemp2 = {
+                  x: timestamp,
+                  y: tempIntCabernet,
+                  mode: 'lines',
+                  name: 'Cabernet',
+                  line: {
+                    color: '#41f444',
+                    shape: 'spline'
+                    }
+                };
+
+                var traceTemp3 = {
+                  x: timestamp,
+                  y: tempExt,
+                  mode: 'lines',
+                  name: 'Ambiente',
+                  line: {
+                    color: '#f4419a',
+                    shape: 'spline'
+                    }
+                };
+
+                var tempView = {
+            title: 'Temperature',
+            xaxis: {
+                type: 'date',
+            },
+            yaxis: {range: [0,35]}
+        };
+
+                var data = [traceTemp1, traceTemp2, traceTemp3];
+
+                Plotly.newPlot('tempGraph', data, tempView);
+
+                var humView = {
+                    title: 'Umidità',
+                    xaxis: {
+                        type: 'date',
+                    },
+                    yaxis: {range: [0,100]}
+                };
+                var traceHum = {
+                  x: timestamp,
+                  y: humidity,
+                  mode: 'lines',
+                  line: {
+                    color: '#80CAF6',
+                    shape: 'spline'
+                    }
+                };
+
+                var data2 = [traceHum];
+
+                Plotly.newPlot('humGraph', data2, humView);
+            }
+        </script>
+	</body>
+</html>

@@ -1,0 +1,7 @@
+WineMonitor-SpringBoot/WineMonitor/src/main/java/com/nicolo/Security/SecurityConfig.java
+WineMonitor-SpringBoot/WineMonitor/target/classes/com/nicolo/Security/SecurityConfig.class
+WineMonitor-ESP8266/config.h
+WineMonitor-PythonMQTT/Info.py
+WineMonitor-PythonMQTT/queryDB.py
+WineMonitor-SpringBoot/WineMonitor/target/
+*.class
