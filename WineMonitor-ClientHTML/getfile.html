@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script type="text/javascript">
+        function createCORSRequest(method, url) {
+            var xhr = new XMLHttpRequest();
+            if ("withCredentials" in xhr) {
+                // XHR for Chrome/Firefox/Opera/Safari.
+                xhr.open(method, url, true);
+            } else if (typeof XDomainRequest != "undefined") {
+                // XDomainRequest for IE.
+                xhr = new XDomainRequest();
+                xhr.open(method, url);
+            } else {
+                // CORS not supported.
+                xhr = null;
+            }
+            return xhr;
+        }
+    </script>
+</head>
+<body>
+    <script type="text/javascript">
+/*
+0  Data (formato gg/mm/aaaa)
+1  Ora (formato hh:mm)
+2  Temperatura
+3  Temperatura massima
+4  Ora temperatura massima
+5  Temperatura minima
+6  Ora temperatura minima
+7  Umidità relativa
+8  Umidità relativa massima
+9  Ora Umidità relativa massima
+10 Umidità relativa minima
+11 Ora Umidità relativa minima
+12 Dew point
+13 Dew point massimo
+14 Ora dew point massimo
+15 Dew point minimo
+16 Ora dew point minimo
+17 Wind chill
+18 Wind chill minimo
+19 Ora wind chill minimo
+20 Heat index
+21 Heat index massimo
+22 Ora heat index massimo
+23 Velocità del vento
+24 Raffica massima del vento
+25 Ora raffica massima del vento
+26 Velocità media negli ultimi 10 minuti
+27 Direzione prevalente (gradi)
+28 Direzione prevalente (settore: ad esempio NW)
+29 Pressione
+30 Tendenza barometrica
+31 Pressione massima
+32 Ora pressione massima
+33 Pressione minima
+34 Ora pressione minima
+35 Precipitazioni odierne (dalla mezzanotte)
+36 Precipitazioni ultimo evento
+37 Precipitazioni mensili
+38 Precipitazioni annue
+39 Rain rate
+40 Rain rate massimo
+41 Ora rain rate massimo
+42 Rain rate massimo ultima ora
+*/
+    window.onload = function (){
+
+// Make the actual CORS request.
+  // This is a sample server that supports CORS.
+  var url = 'http://www.meteovalmorea.it/ftp/realtime.txt';
+
+  var xhr = createCORSRequest('GET', url);
+  if (!xhr) {
+    alert('CORS not supported');
+    return;
+  }
+
+  // Response handlers.
+  xhr.onload = function() {
+    var text = xhr.responseText;
+    var splitted = text.split('\n');
+    //var regex = /\s\s/;
+    splitted[4] = splitted[4].replace('  ',' ');
+    splitted[6] = splitted[6].replace('  ',' ');
+    splitted[25] = splitted[25].replace('  ',' ');
+    var maxTempHour = splitted[4].split(' ');
+    var minTempHour = splitted[6].split(' ');
+    var maxWindHour = splitted[25].split(' ');
+
+    /*
+    C'è un problema:
+      Se la temperatura massima o minima o vel. max giornaliera sono > 9.9 (hanno quindi 3 cifre + il punto) la split di ' ' non funziona.
+      Potrebbe andare se con un for scorro le stringhe e al primo ' ' metto una virgola, gli altri li rimuovo (come???? :) )
+
+
+    */
+ 
+    /*
+      splitted è un vettore con 42 (più la zero) celle contenenti i dati descritti nel commento sopra.
+    */
+    alert("Data - ora " + splitted[0] + " - " + splitted[1] + '\n' +
+          "Temperatura: " + splitted[2] + " C" + '\n' +
+          "Pressione: " + splitted[29] + " hPa" + '\n' +
+          "Umidita': " + splitted[7] + " %" + '\n' +
+          "Prec. odierne: " + splitted[35] + " mm" + '\n' +
+          "Vel. e direzione del vento: " + splitted[23] + " km/h " + splitted[28] + '\n' +
+          "Pioggia tot. annua: " + splitted[38] + " mm" + '\n' +
+          "Temperatura minima giornaliera: " + splitted[5] + " C" + ", ora: " + minTempHour[1] + '\n' +
+          "Temperatura massima giornaliera: " + splitted[3] + " C" + ", ora: " + maxTempHour[1] +'\n' +
+          "Vel. massima vento giornaliera: " + splitted[24] + " km/h" + ", ora: " + maxWindHour[1] +'\n');
+  };
+
+  xhr.onerror = function() {
+    alert('Woops, there was an error making the request.');
+  };
+
+  xhr.send();
+}
+    </script>
+</body>
+</html>

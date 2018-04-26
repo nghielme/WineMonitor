@@ -7,7 +7,7 @@
 	<script type="text/javascript">
 
 		// Create a client instance
-		client = new Paho.MQTT.Client("mqttserver.com", Number(xxxx), "visualizationClient-" + Date.now());
+		client = new Paho.MQTT.Client("winemonitor.ddns.net", Number(8888), "visualizationClient-" + Date.now());
 
 		// set callback handlers
 		client.onConnectionLost = onConnectionLost;
@@ -165,7 +165,7 @@
 		};
 
 		var humView = {
-			title: 'Umidità Ambiente',
+			title: 'Umidit\u00E0 Ambiente',
 		    xaxis: {
 		        type: 'date',
 		        range: [olderTime,futureTime]

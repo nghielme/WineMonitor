@@ -35,11 +35,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .inMemoryAuthentication()
                 .withUser(SecurityConfig.username).password(SecurityConfig.password).roles("ADMIN");
     }
+
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration().applyPermitDefaultValues();
-        config.addAllowedOrigin("*");
+        config.addAllowedOrigin("http://meteovalmorea.it");
         config.setAllowedMethods(Arrays.asList("GET","POST"));
         source.registerCorsConfiguration("/**", config);
         return source;

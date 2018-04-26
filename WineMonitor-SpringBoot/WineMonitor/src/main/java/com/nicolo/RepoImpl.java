@@ -22,6 +22,7 @@ public class RepoImpl implements RepoCustom {
         Long time = new Date().getTime();
         Date date = new Date(time - time % (24 * 60 * 60 * 1000));
         Query query = new Query();
+        query.fields().exclude("_id");
         query.addCriteria(Criteria.where("timestamp").gt(date.getTime()/1000));
         return mongoOperations.find(query,Entry.class);
     }
@@ -29,6 +30,7 @@ public class RepoImpl implements RepoCustom {
     @Override
     public List<Entry> getLT(Long max) {
         Query query = new Query();
+        query.fields().exclude("_id");
         query.addCriteria(Criteria.where("timestamp").lt(max));
         return mongoOperations.find(query,Entry.class);
     }
@@ -36,6 +38,7 @@ public class RepoImpl implements RepoCustom {
     @Override
     public List<Entry> getGT(Long min) {
         Query query = new Query();
+        query.fields().exclude("_id");
         query.addCriteria(Criteria.where("timestamp").gt(min));
         return mongoOperations.find(query,Entry.class);
     }
@@ -43,8 +46,8 @@ public class RepoImpl implements RepoCustom {
     @Override
     public List<Entry> getBetween(Long min, Long max) {
         Query query = new Query();
+        query.fields().exclude("_id");
         query.addCriteria(Criteria.where("timestamp").lt(max).andOperator(Criteria.where("timestamp").gt(min)));
         return mongoOperations.find(query,Entry.class);
     }
-    
 }

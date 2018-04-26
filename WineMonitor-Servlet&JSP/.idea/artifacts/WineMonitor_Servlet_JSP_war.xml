@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="WineMonitor-Servlet&amp;JSP:war">
+    <output-path>$PROJECT_DIR$/out/artifacts/WineMonitor_Servlet_JSP_war</output-path>
+    <root id="archive" name="WineMonitor-Servlet&amp;JSP_war.war">
+      <element id="artifact" artifact-name="WineMonitor-Servlet&amp;JSP:war exploded" />
+    </root>
+  </artifact>
+</component>

@@ -17,7 +17,7 @@
 
  To install the ESP8266 board, (using Arduino 1.6.4+):
   - Add the following 3rd party board manager under "File -> Preferences -> Additional Boards Manager URLs":
-       http://arduino.esp8266.com/stable/package_esp8266com_index.json
+       http://arduino.esp8266.com/stable/package_esp8266com_index.jsonÚ
   - Open the "Tools -> Board -> Board Manager" and click install for the ESP8266"
   - Select your ESP8266 in "Tools -> Board"
 
@@ -43,9 +43,9 @@
 //#define DHTTYPE DHT11   // DHT 11
 #define DHTTYPE DHT22   // DHT 22  (AM2302), AM2321
 //#define DHTTYPE DHT21   // DHT 21 (AM2301)
-const char* ssid = "ssid";
-const char* password = "wpakey";
-const char* mqtt_server = "mqttserveraddress";
+const char* ssid = "wi-fi ronchetto";
+const char* password = "Petauro*316";
+const char* mqtt_server = "192.168.1.35";
 float tempIntNebbiolo = -1000;
 float tempIntCabernet = -1000;
 float tempExt = -1000;

@@ -1,3 +1,5 @@
+import datetime
+
 import paho.mqtt.client as mqtt
 from pymongo import MongoClient
 import json
@@ -36,6 +38,13 @@ def on_connect(client, userdata, flags, rc):
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
     global whenISent
+    global mydate
+    global mongoClient
+    global db
+    if mydate != datetime.date.today():
+        mydate = datetime.date.today()
+        mongoClient.drop_database('test')
+        db = mongoClient.test
     client.publish("debug", msg.payload)
     print("Topic: ", msg.topic+'\nMessage: '+str(msg.payload))
     json_data = json.loads(msg.payload)
@@ -63,8 +72,9 @@ client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
 whenISent = 0
+mydate = datetime.date.today()
 
-client.connect("mqttserver.com", xxxx, 60)
+client.connect("localhost", 1883, 60)
 
 # Blocking call that processes network traffic, dispatches callbacks and
 # handles reconnecting.

@@ -3,11 +3,31 @@
     	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script> 
     	<script src="http://malsup.github.com/jquery.form.js"></script>
         <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+        <style type="text/css">
+          .loader {
+              border: 16px solid #f3f3f3; /* Light grey */
+              border-top: 16px solid #3498db; /* Blue */
+              border-radius: 50%;
+              width: 120px;
+              height: 120px;
+              animation: spin 2s linear infinite;
+              top: 35%;
+              left: 45%;
+              position: absolute;
+          }
+
+          @keyframes spin {
+              0% { transform: rotate(0deg); }
+              100% { transform: rotate(360deg); }
+          }
+        </style>
     	<script type="text/javascript">
     $(document).ready(function(){
-            $.ajax({url: "http://httpserver.com", type: "GET", contentType: "application/json", beforeSend: function (xhr) {
-            xhr.setRequestHeader('Authorization', 'Basic xxxxxxxxxxx');
+            $.ajax({url: "http://winemonitor.ddns.net:8080/entries", type: "GET", contentType: "application/json", beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', 'Basic d2luZW1vbml0b3I6d2luZW1vbml0b3Jwd2Q=');
         }, success: function(result){
+            var loader = document.getElementById("loader");
+            loader.parentNode.removeChild(loader);
             printGraph(result);
         }});
     });
@@ -15,8 +35,12 @@
 
 	</head>
 	<body>
-        <div id="tempGraph"></div>
-        <div id="humGraph"></div>
+    <div class="loader" id="loader"></div>
+    <div id="graphs">
+          <div id="tempGraph"></div>
+          <div id="humGraph"></div>
+    </div>
+
         <script type="text/javascript">
 
             function printGraph(json){
@@ -39,7 +63,7 @@
                   mode: 'lines',
                   name: 'Nebbiolo',
                   line: {
-                    color: '#f45c42',
+                    color: '#f44141',
                     shape: 'spline'
                     }
                 };
@@ -50,7 +74,7 @@
                   mode: 'lines',
                   name: 'Cabernet',
                   line: {
-                    color: '#41f444',
+                    color: '#f4d341',
                     shape: 'spline'
                     }
                 };
@@ -61,7 +85,7 @@
                   mode: 'lines',
                   name: 'Ambiente',
                   line: {
-                    color: '#f4419a',
+                    color: '#426bf4',
                     shape: 'spline'
                     }
                 };
@@ -79,7 +103,7 @@
                 Plotly.newPlot('tempGraph', data, tempView);
 
                 var humView = {
-                    title: 'Umidità',
+                    title: 'Umidit\u00E0',
                     xaxis: {
                         type: 'date',
                     },
