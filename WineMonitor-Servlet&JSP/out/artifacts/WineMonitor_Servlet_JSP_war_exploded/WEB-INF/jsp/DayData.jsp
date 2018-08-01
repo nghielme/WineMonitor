@@ -1,16 +1,20 @@
-<%@ page import="java.util.ArrayList" %><%--
+<%@ page import="Model.DoubleDataModel" %>
+<%@ page import="Model.LongDataModel" %>
+<%--
   Created by IntelliJ IDEA.
   User: nicologhielmetti
   Date: 25/04/2018
   Time: 23:54
   To change this template use File | Settings | File Templates.
 --%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
     <script src="http://malsup.github.com/jquery.form.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
     <style type="text/css">
         .loader {
             border: 16px solid #f3f3f3; /* Light grey */
@@ -29,6 +33,46 @@
             100% { transform: rotate(360deg); }
         }
     </style>
+    <script type="text/javascript">
+
+        // Create a client instance
+        client = new Paho.MQTT.Client("winemonitoresp.ddns.net", Number(8888), "visualizationClient-" + Date.now());
+
+        // set callback handlers
+        client.onConnectionLost = onConnectionLost;
+        client.onMessageArrived = onMessageArrived;
+
+        // connect the client
+        client.connect({onSuccess:onConnect});
+
+
+        // called when the client connects
+        function onConnect() {
+            // Once a connection has been made, make a subscription and send a message.
+            console.log("onConnect");
+            //client.subscribe("temp");
+            client.subscribe("data");
+            /*message = new Paho.MQTT.Message("Hello");
+            message.destinationName = "World";
+            client.send(message);*/
+        }
+
+        // called when the client loses its connection
+        function onConnectionLost(responseObject) {
+            if (responseObject.errorCode !== 0) {
+                console.log("onConnectionLost:"+responseObject.errorMessage);
+            }
+        }
+
+        // called when a message arrives
+        function onMessageArrived(message) {
+            console.log("onMessageArrived:"+message.destinationName);
+            //printGraph(parseInt(message.payloadString));
+            var json = JSON.parse(message.payloadString);
+            printGraphs(json);
+            //printGraphs(json.tempExt,json.timestamp);
+        }
+    </script>
 </head>
 <body onload="printGraph()">
 <div class="loader" id="loader"></div>
@@ -40,28 +84,20 @@
 <script type="text/javascript">
 
     function printGraph(){
-        <%
 
-        Object tempIntNebbiolo = request.getAttribute("tempIntNebbiolo");
-        Object tempIntCabernet = request.getAttribute("tempIntCabernet");
-        Object tempExt = request.getAttribute("tempExt");
-        Object humidity = request.getAttribute("humidity");
-        Object timestamp = request.getAttribute("timestamp");
+        <%
+        DoubleDataModel tempIntNebbiolo = (DoubleDataModel) request.getAttribute("tempIntNebbiolo");
+        DoubleDataModel tempIntCabernet = (DoubleDataModel) request.getAttribute("tempIntCabernet");
+        DoubleDataModel tempExt = (DoubleDataModel) request.getAttribute("tempExt");
+        DoubleDataModel humidity = (DoubleDataModel) request.getAttribute("humidity");
+        LongDataModel timestamp = (LongDataModel) request.getAttribute("timestamp");
         %>
 
-        var tempIntNebbiolo = <%= tempIntNebbiolo %>;
-        var tempIntCabernet = <%= tempIntCabernet %>;
-        var tempExt = <%= tempExt %>;
-        var humidity = <%= humidity %>;
-        var timestamp = <%= timestamp %>;
-
-        /*for (var i = 0; i < json.length; i++) {
-            timestamp.push((json[i].timestamp)*1000);
-            tempIntNebbiolo.push(json[i].tempIntNebbiolo);
-            tempIntCabernet.push(json[i].tempIntCabernet);
-            tempExt.push(json[i].tempExt);
-            humidity.push(json[i].humidity);
-        }*/
+        var tempIntNebbiolo = <%= tempIntNebbiolo.toString() %>;
+        var tempIntCabernet = <%= tempIntCabernet.toString() %>;
+        var tempExt = <%= tempExt.toString() %>;
+        var humidity = <%= humidity.toString() %>;
+        var timestamp = <%= timestamp.toString() %>;
 
         var traceTemp1 = {
             x: timestamp,
@@ -99,7 +135,7 @@
         var tempView = {
             title: 'Temperature',
             xaxis: {
-                type: 'date',
+                type: 'date'
             },
             yaxis: {range: [0,35]}
         };
@@ -111,7 +147,7 @@
         var humView = {
             title: 'Umidit\u00E0',
             xaxis: {
-                type: 'date',
+                type: 'date'
             },
             yaxis: {range: [0,100]}
         };
@@ -128,6 +164,28 @@
         var data2 = [traceHum];
 
         Plotly.newPlot('humGraph', data2, humView);
+    }
+
+    function printFirstGraph(graph,value,timestamp) {
+
+        var time = new Date(timestamp*1000);
+        console.log(value + " - " + graph);
+        var update = {
+            x:  [[time]],
+            y:  [[value]]
+        };
+        var olderTime  = time.setMinutes(time.getMinutes() - 2);
+        var futureTime = time.setMinutes(time.getMinutes() + 2);
+        var minuteView = {
+            xaxis: {
+                type: 'date',
+                range: [olderTime,futureTime]
+            }
+        };
+        Plotly.relayout(graph, minuteView);
+        Plotly.extendTraces(graph, update, [0]);
+
+        if(cnt === 100) clearInterval(interval);
     }
 </script>
 </body>

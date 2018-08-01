@@ -88,7 +88,7 @@
             color: '#80CAF6',
             shape: 'hv'
         }
-    }]
+    }];
 
     var data2 = [{
         x: [time],
@@ -98,7 +98,7 @@
             color: '#80CAF6',
             shape: 'hv'
         }
-    }]
+    }];
 
     var data3 = [{
         x: [time],
@@ -108,7 +108,7 @@
             color: '#80CAF6',
             shape: 'hv'
         }
-    }]
+    }];
 
     var data4 = [{
         x: [time],
@@ -118,7 +118,7 @@
             color: '#80CAF6',
             shape: 'hv'
         }
-    }]
+    }];
     Plotly.plot('graph1', data1);
     Plotly.plot('graph2', data2);
     Plotly.plot('graph3', data3);
@@ -141,7 +141,7 @@
         var update = {
             x:  [[time]],
             y: [[value]]
-        }
+        };
 
         var olderTime  = time.setMinutes(time.getMinutes() - 2);
         var futureTime = time.setMinutes(time.getMinutes() + 2);
@@ -182,14 +182,14 @@
         };
 
         Plotly.relayout('graph1', tempView1);
-        Plotly.extendTraces('graph1', update, [0])
+        Plotly.extendTraces('graph1', update, [0]);
         Plotly.relayout('graph2', tempView2);
-        Plotly.extendTraces('graph2', update, [0])
+        Plotly.extendTraces('graph2', update, [0]);
         Plotly.relayout('graph3', tempView3);
-        Plotly.extendTraces('graph3', update, [0])
+        Plotly.extendTraces('graph3', update, [0]);
         Plotly.relayout('graph4', humView);
-        Plotly.extendTraces('graph4', update, [0])
-    }
+        Plotly.extendTraces('graph4', update, [0]);
+    };
 
     function printGraph(graph,value,timestamp) {
 
@@ -198,7 +198,7 @@
         var update = {
             x:  [[time]],
             y:  [[value]]
-        }
+        };
         var olderTime  = time.setMinutes(time.getMinutes() - 2);
         var futureTime = time.setMinutes(time.getMinutes() + 2);
         var minuteView = {
@@ -208,7 +208,7 @@
             }
         };
         Plotly.relayout(graph, minuteView);
-        Plotly.extendTraces(graph, update, [0])
+        Plotly.extendTraces(graph, update, [0]);
 
         if(cnt === 100) clearInterval(interval);
     }

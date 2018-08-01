@@ -37,5 +37,7 @@
     </orderEntry>
     <orderEntry type="library" name="jquery" level="application" />
     <orderEntry type="library" name="jquery.form" level="application" />
+    <orderEntry type="library" name="plotly-latest" level="application" />
+    <orderEntry type="library" name="mqttws31" level="application" />
   </component>
 </module>

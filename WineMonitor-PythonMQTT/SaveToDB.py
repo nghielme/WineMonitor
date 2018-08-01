@@ -51,10 +51,11 @@ def on_message(client, userdata, msg):
     if json_data["mustSave"]:
         del json_data["mustSave"]
         db.entry.insert_one(json_data)
+    print("DateTime: ", datetime.datetime.fromtimestamp(json_data["timestamp"]).strftime('%d-%m-%Y %H:%M:%S'))
     if (time.time() - whenISent > 600) and (json_data["tempIntCabernet"] > 28 or json_data["tempIntNebbiolo"] > 28 or
                                             json_data["tempExt"] > 25):
         whenISent = time.time()
-        _thread.start_new_thread(sendemail, (Info.addressFrom,
+        _thread.start_new_thread(sendemail, (Info.Info.addressFrom,
                                 Info.addressesTo,
                                 [],
                                 'WineMonitor: warning!',
@@ -68,7 +69,7 @@ def on_message(client, userdata, msg):
 
 mongoClient = MongoClient()
 db = mongoClient.test
-client = mqtt.Client()
+client = mqtt.Client("pythonDataFilter")
 client.on_connect = on_connect
 client.on_message = on_message
 whenISent = 0
