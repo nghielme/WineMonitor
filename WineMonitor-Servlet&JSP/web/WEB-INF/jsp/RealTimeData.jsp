@@ -15,7 +15,7 @@
     <script type="text/javascript">
 
         // Create a client instance
-        client = new Paho.MQTT.Client("winemonitoresp.ddns.net", Number(8888), "visualizationClient-" + Date.now());
+        client = new Paho.MQTT.Client("iot.eclipse.org", Number(80), "/ws", "visualizationClient-" + Date.now());
 
         // set callback handlers
         client.onConnectionLost = onConnectionLost;
