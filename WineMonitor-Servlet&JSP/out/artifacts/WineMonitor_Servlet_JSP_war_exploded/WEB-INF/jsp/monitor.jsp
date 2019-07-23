@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/stylesheets/style.css">
     <script type="text/javascript">
         // Create a client instance
-        client = new Paho.MQTT.Client("broker.hivemq.com", Number(8000), "visualizationClient-" + Date.now());
+        client = new Paho.MQTT.Client("iot.eclipse.org", Number(80), "/ws", "visualizationClient-" + Date.now());
         // set callback handlers
         client.onConnectionLost = onConnectionLost;
         client.onMessageArrived = onMessageArrived;
@@ -221,7 +221,7 @@
         Plotly.extendTraces(graph, update, [0]);
 
         if(cnt === 100) clearInterval(interval);
-    }
+    }*/
     var interval = setInterval(function() {
 
         var time = new Date();
@@ -234,7 +234,7 @@
         Plotly.extendTraces('realTime', update, [0,1]);
 
         //if(cnt === 100) clearInterval(interval);
-    }, 100);*/
+    }, 100);
 
 </script>
 </body>

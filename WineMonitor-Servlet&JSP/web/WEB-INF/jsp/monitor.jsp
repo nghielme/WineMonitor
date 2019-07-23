@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/stylesheets/style.css">
     <script type="text/javascript">
         // Create a client instance
-        client = new Paho.MQTT.Client("broker.hivemq.com", Number(8000), "visualizationClient-" + Date.now());
+        client = new Paho.MQTT.Client("iot.eclipse.org", Number(80), "/ws", "visualizationClient-" + Date.now());
         // set callback handlers
         client.onConnectionLost = onConnectionLost;
         client.onMessageArrived = onMessageArrived;
